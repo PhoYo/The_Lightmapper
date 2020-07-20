@@ -26,6 +26,8 @@ class TLM_PT_Panel(bpy.types.Panel):
         row.prop(sceneProperties, "tlm_clean_option")
         row = layout.row(align=True)
         row.operator("tlm.explore_lightmaps", icon="NONE", icon_value=icon.id("explore"))
+        row = layout.row(align=True)
+        row.operator("tlm.make_gltf", icon="NONE", icon_value=icon.id("make GLTF"))
 
 class TLM_PT_Settings(bpy.types.Panel):
     bl_label = "Settings"

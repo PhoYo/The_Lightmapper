@@ -194,16 +194,16 @@ def save_pfm(file, image, scale=1):
 
     #print("PFM export took %.3f s" % (time() - start))
 
-def check_denoiser_path(self, scene):
+def check_odinDenoiser_path(self, scene):
 
     #TODO - Apply for Optix too...
 
-    if scene.TLM_SceneProperties.tlm_denoise_use:
+    if scene.TLM_SceneProperties.tlm_odinDenoise_use:
         if scene.TLM_SceneProperties.tlm_oidn_path == "":
-            print("NO DENOISE PATH")
+            print("NO odinDenoise PATH")
             return False
         else:
-            #MAKE DETAILED CHECK FOR DENOISE FILE
+            #MAKE DETAILED CHECK FOR odinDenoise FILE
             return True
     else:
         return True
@@ -626,7 +626,7 @@ def postmanage_materials(scene):
                 bpy.data.images[img_name].file_format = "HDR"
                 bpy.data.images[img_name].save()
 
-def denoise_lightmaps(scene):
+def odinDenoise_lightmaps(scene):
 
     filepath = bpy.data.filepath
     dirpath = os.path.join(os.path.dirname(bpy.data.filepath), scene.TLM_SceneProperties.tlm_lightmap_savedir)
@@ -638,32 +638,32 @@ def denoise_lightmaps(scene):
                 img_name = obj.name + '_baked'
                 bakemap_path = os.path.join(dirpath, img_name)
 
-                #Denoise here
-                if scene.TLM_SceneProperties.tlm_denoise_use:
+                #odinDenoise here
+                if scene.TLM_SceneProperties.tlm_odinDenoise_use:
                     
                     #Optix
-                    if scene.TLM_SceneProperties.tlm_denoiser == "Optix":
+                    if scene.TLM_SceneProperties.tlm_odinDenoiser == "Optix":
 
                         image_output_destination = bakemap_path + ".hdr"
-                        denoise_output_destination = bakemap_path + "_denoised.hdr"
+                        odinDenoise_output_destination = bakemap_path + "_odinDenoised.hdr"
 
                         if platform.system() == 'Windows':
-                            optixPath = os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_optix_path),"Denoiser.exe")
-                            pipePath = [optixPath, '-i', image_output_destination, '-o', denoise_output_destination]
+                            optixPath = os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_optix_path),"odinDenoiser.exe")
+                            pipePath = [optixPath, '-i', image_output_destination, '-o', odinDenoise_output_destination]
                         elif platform.system() == 'Darwin':
                             print("Mac for Optix is still unsupported")    
                         else:
                             print("Linux for Optix is still unsupported")
 
                         if scene.TLM_SceneProperties.tlm_optix_verbose:
-                            denoisePipe = subprocess.Popen(pipePath, shell=True)
+                            odinDenoisePipe = subprocess.Popen(pipePath, shell=True)
                         else:
-                            denoisePipe = subprocess.Popen(pipePath, stdout=subprocess.PIPE, stderr=None, shell=True)
+                            odinDenoisePipe = subprocess.Popen(pipePath, stdout=subprocess.PIPE, stderr=None, shell=True)
 
-                        denoisePipe.communicate()[0]
+                        odinDenoisePipe.communicate()[0]
                         
                         image = bpy.data.images[img_name]
-                        bpy.data.images[image.name].filepath_raw = bpy.data.images[image.name].filepath_raw[:-4] + "_denoised.hdr"
+                        bpy.data.images[image.name].filepath_raw = bpy.data.images[image.name].filepath_raw[:-4] + "_odinDenoised.hdr"
                         bpy.data.images[image.name].reload()
 
                     else: #OIDN
@@ -682,7 +682,7 @@ def denoise_lightmaps(scene):
                         with open(image_output_destination, "wb") as fileWritePFM:
                             save_pfm(fileWritePFM, image_output_array)
 
-                        denoise_output_destination = bakemap_path + "_denoised.pfm"
+                        odinDenoise_output_destination = bakemap_path + "_odinDenoised.pfm"
 
                         Scene = scene
 
@@ -690,7 +690,7 @@ def denoise_lightmaps(scene):
                         affinity = Scene.TLM_SceneProperties.tlm_oidn_affinity
 
                         if verbose:
-                            print("Denoiser search: " + os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_oidn_path),"denoise.exe"))
+                            print("odinDenoiser search: " + os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_oidn_path),"odinDenoise.exe"))
                             v = "3"
                         else:
                             v = "0"
@@ -704,30 +704,30 @@ def denoise_lightmaps(scene):
                         maxmem = str(Scene.TLM_SceneProperties.tlm_oidn_maxmem)
 
                         if platform.system() == 'Windows':
-                            oidnPath = os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_oidn_path),"denoise.exe")
-                            pipePath = [oidnPath, '-f', 'RTLightmap', '-hdr', image_output_destination, '-o', denoise_output_destination, '-verbose', v, '-threads', threads, '-affinity', a, '-maxmem', maxmem]
+                            oidnPath = os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_oidn_path),"odinDenoise.exe")
+                            pipePath = [oidnPath, '-f', 'RTLightmap', '-hdr', image_output_destination, '-o', odinDenoise_output_destination, '-verbose', v, '-threads', threads, '-affinity', a, '-maxmem', maxmem]
                         elif platform.system() == 'Darwin':
-                            oidnPath = os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_oidn_path),"denoise")
-                            pipePath = [oidnPath + ' -f ' + ' RTLightmap ' + ' -hdr ' + image_output_destination + ' -o ' + denoise_output_destination + ' -verbose ' + v]
+                            oidnPath = os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_oidn_path),"odinDenoise")
+                            pipePath = [oidnPath + ' -f ' + ' RTLightmap ' + ' -hdr ' + image_output_destination + ' -o ' + odinDenoise_output_destination + ' -verbose ' + v]
                         else:
-                            oidnPath = os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_oidn_path),"denoise")
-                            pipePath = [oidnPath + ' -f ' + ' RTLightmap ' + ' -hdr ' + image_output_destination + ' -o ' + denoise_output_destination + ' -verbose ' + v]
+                            oidnPath = os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_oidn_path),"odinDenoise")
+                            pipePath = [oidnPath + ' -f ' + ' RTLightmap ' + ' -hdr ' + image_output_destination + ' -o ' + odinDenoise_output_destination + ' -verbose ' + v]
                             
                         if not verbose:
-                            denoisePipe = subprocess.Popen(pipePath, stdout=subprocess.PIPE, stderr=None, shell=True)
+                            odinDenoisePipe = subprocess.Popen(pipePath, stdout=subprocess.PIPE, stderr=None, shell=True)
                         else:
-                            denoisePipe = subprocess.Popen(pipePath, shell=True)
+                            odinDenoisePipe = subprocess.Popen(pipePath, shell=True)
 
-                        denoisePipe.communicate()[0]
+                        odinDenoisePipe.communicate()[0]
 
-                        with open(denoise_output_destination, "rb") as f:
-                            denoise_data, scale = load_pfm(f)
+                        with open(odinDenoise_output_destination, "rb") as f:
+                            odinDenoise_data, scale = load_pfm(f)
 
-                        ndata = np.array(denoise_data)
+                        ndata = np.array(odinDenoise_data)
                         ndata2 = np.dstack( (ndata, np.ones((width,height)) )  )
                         img_array = ndata2.ravel()
                         bpy.data.images[image.name].pixels = img_array
-                        bpy.data.images[image.name].filepath_raw = bakemap_path + "_denoised.hdr"
+                        bpy.data.images[image.name].filepath_raw = bakemap_path + "_odinDenoised.hdr"
                         bpy.data.images[image.name].file_format = "HDR"
                         bpy.data.images[image.name].save()
 
@@ -743,8 +743,8 @@ def filter_lightmaps(self, scene):
                 bakemap_path = os.path.join(dirpath, img_name)
 
                 if scene.TLM_SceneProperties.tlm_filtering_use:
-                    if scene.TLM_SceneProperties.tlm_denoise_use:
-                        filter_file_input = img_name + "_denoised.hdr"
+                    if scene.TLM_SceneProperties.tlm_odinDenoise_use:
+                        filter_file_input = img_name + "_odinDenoised.hdr"
                     else:
                         filter_file_input = img_name + ".hdr"
 
@@ -990,7 +990,7 @@ def apply_materials(scene):
             for file in list:
                 if file.endswith(".pfm"):
                     os.remove(os.path.join(dirpath,file))
-                if file.endswith("denoised.hdr"):
+                if file.endswith("odinDenoised.hdr"):
                     os.remove(os.path.join(dirpath,file))
                 #if file.endswith("finalized.hdr"):
                 #        os.remove(os.path.join(dirpath,file))
@@ -1200,14 +1200,14 @@ def TLM_Build_AO():
                     nodetree.links.new(mixNode.outputs[0], mainNode.inputs[0]) 
                     nodetree.links.new(UVLightmap.outputs[0], LightmapNode.inputs[0])
 
-                #SAVE/DENOISE AO
+                #SAVE/odinDenoise AO
 
                 dirpath = os.path.join(os.path.dirname(bpy.data.filepath), scene.TLM_SceneProperties.tlm_lightmap_savedir)
                 bakemap_path = os.path.join(dirpath, img_name)
 
-                denoiseAO = False
+                odinDenoiseAO = False
 
-                if(denoiseAO):
+                if(odinDenoiseAO):
                     print("denoising AO")
                     image = bpy.data.images[img_name]
                     width = image.size[0]
@@ -1223,7 +1223,7 @@ def TLM_Build_AO():
                     with open(image_output_destination, "wb") as fileWritePFM:
                         save_pfm(fileWritePFM, image_output_array)
 
-                    denoise_output_destination = bakemap_path + "_denoised.pfm"
+                    odinDenoise_output_destination = bakemap_path + "_odinDenoised.pfm"
 
                     Scene = scene
 
@@ -1231,7 +1231,7 @@ def TLM_Build_AO():
                     affinity = Scene.TLM_SceneProperties.tlm_oidn_affinity
 
                     if verbose:
-                        print("Denoiser search: " + os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_oidn_path),"denoise.exe"))
+                        print("odinDenoiser search: " + os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_oidn_path),"odinDenoise.exe"))
                         v = "3"
                     else:
                         v = "0"
@@ -1245,30 +1245,30 @@ def TLM_Build_AO():
                     maxmem = str(Scene.TLM_SceneProperties.tlm_oidn_maxmem)
 
                     if platform.system() == 'Windows':
-                        oidnPath = os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_oidn_path),"denoise.exe")
-                        pipePath = [oidnPath, '-f', 'RTLightmap', '-hdr', image_output_destination, '-o', denoise_output_destination, '-verbose', v, '-threads', threads, '-affinity', a, '-maxmem', maxmem]
+                        oidnPath = os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_oidn_path),"odinDenoise.exe")
+                        pipePath = [oidnPath, '-f', 'RTLightmap', '-hdr', image_output_destination, '-o', odinDenoise_output_destination, '-verbose', v, '-threads', threads, '-affinity', a, '-maxmem', maxmem]
                     elif platform.system() == 'Darwin':
-                        oidnPath = os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_oidn_path),"denoise")
-                        pipePath = [oidnPath + ' -f ' + ' RTLightmap ' + ' -hdr ' + image_output_destination + ' -o ' + denoise_output_destination + ' -verbose ' + v]
+                        oidnPath = os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_oidn_path),"odinDenoise")
+                        pipePath = [oidnPath + ' -f ' + ' RTLightmap ' + ' -hdr ' + image_output_destination + ' -o ' + odinDenoise_output_destination + ' -verbose ' + v]
                     else:
-                        oidnPath = os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_oidn_path),"denoise")
-                        pipePath = [oidnPath + ' -f ' + ' RTLightmap ' + ' -hdr ' + image_output_destination + ' -o ' + denoise_output_destination + ' -verbose ' + v]
+                        oidnPath = os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_oidn_path),"odinDenoise")
+                        pipePath = [oidnPath + ' -f ' + ' RTLightmap ' + ' -hdr ' + image_output_destination + ' -o ' + odinDenoise_output_destination + ' -verbose ' + v]
                         
                     if not verbose:
-                        denoisePipe = subprocess.Popen(pipePath, stdout=subprocess.PIPE, stderr=None, shell=True)
+                        odinDenoisePipe = subprocess.Popen(pipePath, stdout=subprocess.PIPE, stderr=None, shell=True)
                     else:
-                        denoisePipe = subprocess.Popen(pipePath, shell=True)
+                        odinDenoisePipe = subprocess.Popen(pipePath, shell=True)
 
-                    denoisePipe.communicate()[0]
+                    odinDenoisePipe.communicate()[0]
 
-                    with open(denoise_output_destination, "rb") as f:
-                        denoise_data, scale = load_pfm(f)
+                    with open(odinDenoise_output_destination, "rb") as f:
+                        odinDenoise_data, scale = load_pfm(f)
 
-                    ndata = np.array(denoise_data)
+                    ndata = np.array(odinDenoise_data)
                     ndata2 = np.dstack( (ndata, np.ones((width,height)) )  )
                     img_array = ndata2.ravel()
                     bpy.data.images[image.name].pixels = img_array
-                    bpy.data.images[image.name].filepath_raw = bakemap_path + "_denoised.hdr"
+                    bpy.data.images[image.name].filepath_raw = bakemap_path + "_odinDenoised.hdr"
                     bpy.data.images[image.name].file_format = "HDR"
                     bpy.data.images[image.name].save()
 
@@ -1293,8 +1293,8 @@ def bake_ordered(self, context, process):
 
     total_time = time()
 
-    if not check_denoiser_path(self, scene):
-        self.report({'INFO'}, "No denoise OIDN path assigned")
+    if not check_odinDenoiser_path(self, scene):
+        self.report({'INFO'}, "No odinDenoise OIDN path assigned")
         return{'FINISHED'}
 
     check_compatible_naming(self)
@@ -1316,9 +1316,9 @@ def bake_ordered(self, context, process):
     print("////////////////////////////// MANAGING LIGHTMAPS")
     postmanage_materials(scene)
 
-    #Denoise lightmaps
+    #odinDenoise lightmaps
     print("////////////////////////////// DENOISING LIGHTMAPS")
-    denoise_lightmaps(scene)
+    odinDenoise_lightmaps(scene)
 
     #Filter lightmaps
     print("////////////////////////////// FILTERING LIGHTMAPS")
