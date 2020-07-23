@@ -99,6 +99,7 @@ class TLM_BuildLightmaps(bpy.types.Operator):
         self._handle = bpy.types.SpaceView3D.draw_handler_remove(self._handle, 'WINDOW')
         #print("Cancel..")
 
+    # shows that the lightmaps are building
     def draw_callback_px(self, context, event):
         """Draw on the viewports"""
         # BLF drawing routine

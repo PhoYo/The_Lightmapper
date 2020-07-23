@@ -4,7 +4,7 @@ from bpy.types import Menu, Panel
 from .. Utility import icon
 
 class TLM_PT_Panel(bpy.types.Panel):
-    bl_label = "The Lightmapper"
+    bl_label = "The Lightmapper pho Ver"
     bl_space_type = "PROPERTIES"
     bl_region_type = "WINDOW"
     bl_context = "render"
@@ -12,7 +12,7 @@ class TLM_PT_Panel(bpy.types.Panel):
 
     def draw(self, context):
         layout = self.layout
-        scene = context.scene
+        scene = context.scene   
         layout.use_property_split = True
         layout.use_property_decorate = False
         sceneProperties = scene.TLM_SceneProperties
@@ -27,7 +27,7 @@ class TLM_PT_Panel(bpy.types.Panel):
         row = layout.row(align=True)
         row.operator("tlm.explore_lightmaps", icon="NONE", icon_value=icon.id("explore"))
         row = layout.row(align=True)
-        row.operator("tlm.make_gltf", icon="NONE", icon_value=icon.id("make GLTF"))
+        row.operator("tlm.gltf_lightmaps", icon="NONE",  icon_value=icon.id("explore"))
 
 class TLM_PT_Settings(bpy.types.Panel):
     bl_label = "Settings"

@@ -1,12 +1,13 @@
 import bpy
 from bpy.utils import register_class, unregister_class
-from . import build, clean, explore, encode, installopencv, gui, xBake, selection, additional, lighttools
+from . import build, clean, explore, gltf, encode, installopencv, gui, xBake, selection, additional, lighttools
 
 classes = [
     build.TLM_BuildLightmaps,
     clean.TLM_CleanLightmaps,
     encode.TLM_EncodeLightmaps,
     explore.TLM_ExploreLightmaps,
+    gltf.TLM_GltfLightmaps,
     installopencv.TLM_Install_OpenCV,
     selection.TLM_EnableSelection,
     selection.TLM_DisableSelection,

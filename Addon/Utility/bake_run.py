@@ -77,6 +77,8 @@ def bake_ordered(self, context, process):
     lightbake.bake_objects(scene)
 
     bake_time = sec_to_hours((time() - total_time))
+    
+    print("baking time " + str(bake_time))
 
     #Post configuration
     print("////////////////////////////// MANAGING LIGHTMAPS")
