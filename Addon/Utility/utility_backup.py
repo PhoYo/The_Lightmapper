@@ -690,7 +690,7 @@ def odinDenoise_lightmaps(scene):
                         affinity = Scene.TLM_SceneProperties.tlm_oidn_affinity
 
                         if verbose:
-                            print("odinDenoiser search: " + os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_oidn_path),"odinDenoise.exe"))
+                            print("odinDenoiser search: " + os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_oidn_path),"oidnDenoise.exe"))
                             v = "3"
                         else:
                             v = "0"
@@ -704,13 +704,13 @@ def odinDenoise_lightmaps(scene):
                         maxmem = str(Scene.TLM_SceneProperties.tlm_oidn_maxmem)
 
                         if platform.system() == 'Windows':
-                            oidnPath = os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_oidn_path),"odinDenoise.exe")
+                            oidnPath = os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_oidn_path),"oidnDenoise.exe")
                             pipePath = [oidnPath, '-f', 'RTLightmap', '-hdr', image_output_destination, '-o', odinDenoise_output_destination, '-verbose', v, '-threads', threads, '-affinity', a, '-maxmem', maxmem]
                         elif platform.system() == 'Darwin':
-                            oidnPath = os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_oidn_path),"odinDenoise")
+                            oidnPath = os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_oidn_path),"oidnDenoise")
                             pipePath = [oidnPath + ' -f ' + ' RTLightmap ' + ' -hdr ' + image_output_destination + ' -o ' + odinDenoise_output_destination + ' -verbose ' + v]
                         else:
-                            oidnPath = os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_oidn_path),"odinDenoise")
+                            oidnPath = os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_oidn_path),"oidnDenoise")
                             pipePath = [oidnPath + ' -f ' + ' RTLightmap ' + ' -hdr ' + image_output_destination + ' -o ' + odinDenoise_output_destination + ' -verbose ' + v]
                             
                         if not verbose:
@@ -1231,7 +1231,7 @@ def TLM_Build_AO():
                     affinity = Scene.TLM_SceneProperties.tlm_oidn_affinity
 
                     if verbose:
-                        print("odinDenoiser search: " + os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_oidn_path),"odinDenoise.exe"))
+                        print("odinDenoiser search: " + os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_oidn_path),"oidnDenoise.exe"))
                         v = "3"
                     else:
                         v = "0"
@@ -1245,13 +1245,13 @@ def TLM_Build_AO():
                     maxmem = str(Scene.TLM_SceneProperties.tlm_oidn_maxmem)
 
                     if platform.system() == 'Windows':
-                        oidnPath = os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_oidn_path),"odinDenoise.exe")
+                        oidnPath = os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_oidn_path),"oidnDenoise.exe")
                         pipePath = [oidnPath, '-f', 'RTLightmap', '-hdr', image_output_destination, '-o', odinDenoise_output_destination, '-verbose', v, '-threads', threads, '-affinity', a, '-maxmem', maxmem]
                     elif platform.system() == 'Darwin':
-                        oidnPath = os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_oidn_path),"odinDenoise")
+                        oidnPath = os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_oidn_path),"oidnDenoise")
                         pipePath = [oidnPath + ' -f ' + ' RTLightmap ' + ' -hdr ' + image_output_destination + ' -o ' + odinDenoise_output_destination + ' -verbose ' + v]
                     else:
-                        oidnPath = os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_oidn_path),"odinDenoise")
+                        oidnPath = os.path.join(bpy.path.abspath(scene.TLM_SceneProperties.tlm_oidn_path),"oidnDenoise")
                         pipePath = [oidnPath + ' -f ' + ' RTLightmap ' + ' -hdr ' + image_output_destination + ' -o ' + odinDenoise_output_destination + ' -verbose ' + v]
                         
                     if not verbose:
