@@ -42,34 +42,34 @@ class TLM_GltfLightmaps(bpy.types.Operator):
                                 lightmapNode = node
                                 print("node type : " + str(node) + " label : " + node.bl_label + " name : " + node.name)
 
-                    outputNode = nodetree.nodes[0]
+                                outputNode = nodetree.nodes[0]
 
-                    # if(outputNode.type != "OUTPUT_MATERIAL"):
-                    #     for node in nodetree.nodes:
-                    #         if node.type == "OUTPUT_MATERIAL":
-                    #             outputNode = node
-                    #             break
-                    
-                    #print("out node : " + str(outputNode))
-                    
-                    gltfNode = nodetree.nodes.new(type="ShaderNodeGroup")
-                    gltfNode.node_tree = bpy.data.node_groups["glTF Settings"]
-                    gltfNode.location = ((lightmapNode.location[0] + 600, lightmapNode.location[1]))
-                    gltfNode.name = "gltfNode"
+                                # if(outputNode.type != "OUTPUT_MATERIAL"):
+                                #     for node in nodetree.nodes:
+                                #         if node.type == "OUTPUT_MATERIAL":
+                                #             outputNode = node
+                                #             break
+                                
+                                #print("out node : " + str(outputNode))
+                                
+                                gltfNode = nodetree.nodes.new(type="ShaderNodeGroup")
+                                gltfNode.node_tree = bpy.data.node_groups["glTF Settings"]
+                                gltfNode.location = ((lightmapNode.location[0] + 600, lightmapNode.location[1]))
+                                gltfNode.name = "gltfNode"
 
-                    
-                    for output in lightmapNode.outputs:
-                        if output.name == "Color":
-                            #output.default_value = gltfNode.inputs[0].default_value
-                            print("lightmap output socket : " + output.name)
-                            
-                            #link the nodes
-                            nodetree.links.remove(output.links[0])
-                            nodetree.links.new(output, gltfNode.inputs[0])
-                        
-                    
+                                
+                                for output in lightmapNode.outputs:
+                                    if output.name == "Color":
+                                        #output.default_value = gltfNode.inputs[0].default_value
+                                        print("lightmap output socket : " + output.name)
+                                        
+                                        #link the nodes
+                                        nodetree.links.remove(output.links[0])
+                                        nodetree.links.new(output, gltfNode.inputs[0])
+                                    
+                                
 
-                    print("gltf node created : " + gltfNode.name)
+                                print("gltf node created : " + gltfNode.name)
 
                     # first restore the backup material
                         
