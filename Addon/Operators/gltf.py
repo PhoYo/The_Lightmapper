@@ -36,7 +36,20 @@ class TLM_GltfLightmaps(bpy.types.Operator):
                     # find the nodetree for the material slot
                     nodetree = bpy.data.materials[slot.name].node_tree
 
+                  
+
                     for node in nodetree.nodes:
+
+                        if node.type == "MIX_RGB":
+                            print("Mix RGB : " + node.type)
+
+                            for input in node.inputs:
+                                print(" Mix RGB : outputs : " + input.name)
+
+                                if input.name == "Fac":
+                                    input.default_value = 0
+
+
                         if node.type == "TEX_IMAGE":
                             if node.name == "Lightmap_Image":
                                 lightmapNode = node
