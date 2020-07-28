@@ -41,9 +41,6 @@ class TLM_GltfLightmaps(bpy.types.Operator):
                     for node in nodetree.nodes:
                         print("ALL NODES : " + node.name)
 
-                        
-
-                            
                         if node.name == "Lightmap_Image":
                             lightmapNode = node
                             print("node type : " + str(node) + " label : " + node.bl_label + " name : " + node.name)
@@ -109,24 +106,20 @@ class TLM_GltfLightmaps(bpy.types.Operator):
                     nodetree.nodes.remove( multiply )
                 except:
                     print("no multiply node")
+
+
+
+                bpy.ops.object.transform_apply(location = True, scale = True, rotation = True)
                 
-                            
- 
 
+                
 
-
-                    # first restore the backup material
-                        
         print("--baked images--")
         for image in bpy.data.images:
             if image.name.endswith("_baked"):
                 print(image.name)
-                #connect that to the gltf node
-                #bpy.data.images.remove(image, do_unlink=True)
 
-
-        # for mat in bpy.data.materials:
-        #     mat.update_tag()
+ 
 
         return{'FINISHED'}
 
