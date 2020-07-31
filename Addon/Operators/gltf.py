@@ -36,7 +36,11 @@ class TLM_GltfLightmaps(bpy.types.Operator):
                     # find the nodetree for the material slot
                     nodetree = bpy.data.materials[slot.name].node_tree
 
-                    principled = nodetree.nodes["Principled BSDF"]
+                    try:
+                         principled = nodetree.nodes["Principled BSDF"]
+                    except:
+                        print("no principled BSDF node")
+                    
 
                     for node in nodetree.nodes:
                         print("ALL NODES : " + node.name)
@@ -111,15 +115,15 @@ class TLM_GltfLightmaps(bpy.types.Operator):
 
                 bpy.ops.object.transform_apply(location = True, scale = True, rotation = True)
                 
-
+        #bpy.ops.export_scene.gltf(export_format='GLTF_SEPARATE', export_selected=True, use_selection=True)
                 
 
-        print("--baked images--")
-        for image in bpy.data.images:
-            if image.name.endswith("_baked"):
-                print(image.name)
+        # print("--baked images--")
+        # for image in bpy.data.images:
+        #     if image.name.endswith("_baked"):
+        #         print(image.name)
 
- 
+        
 
         return{'FINISHED'}
 
