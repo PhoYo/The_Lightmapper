@@ -91,14 +91,17 @@ class TLM_GltfLightmaps(bpy.types.Operator):
 
                         if node.name == "Lightmap_BasecolorNode_A":
 
+                            
                             print("this has base colour")
 
                             baseColor = node
+                            nodetree.nodes.remove( baseColor )
 
-                            for output in baseColor.outputs:
-                                if output.name == "Color":
-                                    nodetree.links.remove(output.links[0])
-                                    nodetree.links.new(output, principled.inputs["Base Color"])
+                            # for output in baseColor.outputs:
+                            #     if output.name == "Color":
+                            #         nodetree.nodes.remove( baseColor )
+                                    #nodetree.links.remove(output.links[0])
+                                    #nodetree.links.new(output, principled.inputs["Base Color"])
 
                     
                 
