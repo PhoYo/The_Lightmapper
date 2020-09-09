@@ -28,10 +28,10 @@ class TLM_GltfLightmaps(bpy.types.Operator):
                     
                     print("slot : " + slot.name)
 
-                    tlm_gltf = bpy.data.node_groups.get('glTF Settings')
+                    # tlm_gltf = bpy.data.node_groups.get('glTF Settings')
                     
-                    if tlm_gltf == None:
-                        utility.load_library('glTF Settings')
+                    # if tlm_gltf == None:
+                    #     utility.load_library('glTF Settings')
                         
                     # find the nodetree for the material slot
                     nodetree = bpy.data.materials[slot.name].node_tree
@@ -59,10 +59,10 @@ class TLM_GltfLightmaps(bpy.types.Operator):
                             
                             #print("out node : " + str(outputNode))
                             
-                            gltfNode = nodetree.nodes.new(type="ShaderNodeGroup")
-                            gltfNode.node_tree = bpy.data.node_groups["glTF Settings"]
-                            gltfNode.location = ((lightmapNode.location[0] + 600, lightmapNode.location[1]))
-                            gltfNode.name = "gltfNode"
+                            # gltfNode = nodetree.nodes.new(type="ShaderNodeGroup")
+                            # gltfNode.node_tree = bpy.data.node_groups["glTF Settings"]
+                            # gltfNode.location = ((lightmapNode.location[0] + 600, lightmapNode.location[1]))
+                            # gltfNode.name = "gltfNode"
 
                             
                             for output in lightmapNode.outputs:
@@ -72,11 +72,11 @@ class TLM_GltfLightmaps(bpy.types.Operator):
                                     
                                     #link the nodes
                                     nodetree.links.remove(output.links[0])
-                                    nodetree.links.new(output, gltfNode.inputs[0])
+                                    nodetree.links.new(output, principled.inputs["Emission"]) #Lightmap connected the the emissive node
                                 
                             
 
-                            print("gltf node created : " + gltfNode.name)
+                            # print("gltf node created : " + gltfNode.name)
 
 
                         if node.name == "LM_P":
