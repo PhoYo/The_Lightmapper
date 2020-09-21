@@ -27,7 +27,9 @@ class TLM_PT_Panel(bpy.types.Panel):
         row = layout.row(align=True)
         row.operator("tlm.explore_lightmaps", icon="NONE", icon_value=icon.id("explore"))
         row = layout.row(align=True)
-        row.operator("tlm.gltf_lightmaps", icon="NONE",  icon_value=icon.id("explore"))
+        row.operator("tlm.gltf_lightmaps", icon="NONE",  icon_value=icon.id("gltf"))
+        row = layout.row(align=True)
+        row.operator("tlm.uv_change", icon="NONE",  icon_value=icon.id("UVchange"))
 
 class TLM_PT_Settings(bpy.types.Panel):
     bl_label = "Settings"
