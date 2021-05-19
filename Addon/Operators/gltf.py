@@ -38,9 +38,22 @@ class TLM_GltfLightmaps(bpy.types.Operator):
 
                     try:
                          principled = nodetree.nodes["Principled BSDF"]
+                         
                     except:
                         print("no principled BSDF node")
+                        try:
+                            principled = nodetree.nodes["Extreme PBR BSDF"]
+                        except:
+                            print("no extreme PBR Evo BSDF node")
+                                        
                     
+                  
+                    
+                    
+                    
+                        
+                    
+
 
                     for node in nodetree.nodes:
                         print("ALL NODES : " + node.name)
